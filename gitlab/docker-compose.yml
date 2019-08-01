@@ -21,6 +21,8 @@
      image: gitlab/gitlab-runner:alpine
      volumes:
        - /srv/gitlab/gitlab-runner:/etc/gitlab-runner
+       - /var/run/docker.sock:/var/run/docker.sock
+       - /root/.m2:/root/.m2
      deploy:
        mode: replicated
        replicas: 1
