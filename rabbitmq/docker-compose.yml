@@ -1,0 +1,20 @@
+version: "3.7"
+services: 
+  rmq:
+    image: rabbitmq:3.8-rc-management
+    # container_name: rabbitmq  docker stack deploy 不支持
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: go1nIQVO8yjXmKiJzIM=
+    deploy:
+      restart_policy: 
+        condition: on-failure
+    volumes:
+      - data_rmq:/etc/rabbitmq
+      - data_rmq:/var/lib/rabbitmq
+      - data_rmq:/var/log/rabbitmq
+volumes:
+  data_rmq:
