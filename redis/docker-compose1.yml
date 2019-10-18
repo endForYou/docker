@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  redis:
+    image: redis:4.0.11-alpine
+    command: redis-server --requirepass 123456
+    volumes:
+      - data-redis1:/data
+      - data-redis1:/usr/local/etc/redis
+    ports:
+      - "6389:6379"
+    networks:
+      - redisnet1
+networks:
+  redisnet1:
+volumes:
+  data-redis1:
