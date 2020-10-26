@@ -20,6 +20,10 @@ elif [ $1 = "edit_oms" ]; then
         port="9080:9080"
 elif [ $1 = "evaluation" ];then
 	port="9070:8080"
+elif [ $1 = "teacher" ]; then
+        port="9060:8080"
+elif [ $1 = "psychological-evaluation" ]; then
+        port="9050:8080"
 fi
 project_name=$1
 image_repository=registry.cn-huhehaote.aliyuncs.com/fdfront/$project_name
