@@ -1,10 +1,10 @@
  version: "3.6"
  services:
    gitlab:
-     image: gitlab/gitlab-ce:latest
+     image: gitlab/gitlab-ce:12.8.2-ce.0
      ports:
        - "222:22"
-       - "8081:80"
+       - "8090:80"
        - "8443:443"
      volumes:
        - /srv/gitlab/data:/var/opt/gitlab

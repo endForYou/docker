@@ -10,8 +10,8 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-    #environment:
-     # MYSQL_ROOT_PASSWORD: 123456
+    environment:
+     MYSQL_ROOT_PASSWORD: 123456
     volumes:
       - data-mysql:/var/lib/mysql
       - config-mysql:/etc/mysql

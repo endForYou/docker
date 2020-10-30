@@ -1,0 +1,71 @@
+version: '2'
+services:
+  phantomjs:
+    image: 'binux/pyspider:latest'
+    command: phantomjs
+    cpu_shares: 256
+    environment:
+      - 'EXCLUDE_PORTS=5000,23333,24444'
+    expose:
+      - '25555' # 暴露端口25555给link到此service的容器
+    mem_limit: 256m
+    restart: always
+
+  phantomjs-lb:
+    image: 'dockercloud/haproxy:latest' # 使用haproxy使用负载均衡
+    links:
+      - phantomjs
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # docker-compose v2版本中haproxy需要指定docker socket(MAC系统中)
+    restart: always
+
+  fetcher:
+    image: 'binux/pyspider:latest'
+    command: '--message-queue "redis://172.20.0.3:6379/0" --phantomjs-proxy "phantomjs:80" fetcher --xmlrpc' # fetcher以rpc的方式启动
+    cpu_shares: 256
+    environment:
+      - 'EXCLUDE_PORTS=5000,25555,23333'
+    links:
+      - 'phantomjs-lb:phantomjs'
+    mem_limit: 256m
+    restart: always
+
+  fetcher-lb:
+    image: 'dockercloud/haproxy:latest' # 使用haproxy使用负载均衡
+    links:
+      - fetcher
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # docker-compose v2版本中haproxy需要指定docker socket(MAC系统中)
+    restart: always
+    
+  processor:
+    image: 'binux/pyspider:latest'
+    command: '--projectdb "mysql+projectdb://root:root123@172.20.0.2:3306/projectdb" --message-queue "redis://172.20.0.3:6379/0" processor'
+    cpu_shares: 256
+    mem_limit: 256m
+    restart: always
+ 
+  result-worker:
+    image: 'binux/pyspider:latest'
+    command: '--taskdb "mysql+taskdb://root:root123@172.20.0.2:3306/taskdb"  --projectdb "mysql+projectdb://root:root123@172.20.0.2:3306/projectdb" --resultdb "mysql+resultdb://root:root123@172.20.0.2:3306/resultdb" --message-queue "redis://172.20.0.3:6379/0" result_worker'
+    cpu_shares: 256
+    mem_limit: 256m
+    restart: always
+    
+  webui:
+    image: 'binux/pyspider:latest'
+    command: '--taskdb "mysql+taskdb://root:root123@172.20.0.2:3306/taskdb"  --projectdb "mysql+projectdb://root:root123@172.20.0.2:3306/projectdb" --resultdb "mysql+resultdb://root:root123@172.20.0.2:3306/resultdb" --message-queue "redis://172.20.0.3:6379/0" webui --max-rate 0.3 --max-burst 3 --scheduler-rpc "http://172.20.0.4:23333/" --fetcher-rpc "http://fetcher/"'
+    cpu_shares: 256
+    environment:
+      - 'EXCLUDE_PORTS=24444,25555,23333'
+    ports:
+      - '5000:5000' # webui的对外的端口为5000，可以通过http://localhost:5000访问webui服务。
+    links:
+      - 'fetcher-lb:fetcher' # link到其它负载均衡haproxy的服务。
+    mem_limit: 256m
+    restart: always
+
+networks:
+  default:
+    external:
+      name: pyspider #指定docker-compose的网络接口为：pyspider；实现和docker run方式创建容器的互通。
