@@ -29,7 +29,11 @@ elif [ $1 = "eva" ]; then
 elif [ $1 = "volunteer-admin" ]; then
 	port="10032:8080"
 elif [ $1 = "zhiya_gaokao" ]; then
-	port="10033:3000"
+	port="10050:3000"
+elif [ $1 = "zhiya-teacher" ]; then
+	port="10051:8080"
+elif [ $1 = "zhiya-sass" ]; then
+	port="10052:8080"
 fi
 project_name=$1
 if [ $project_name = "eva" ]; then
