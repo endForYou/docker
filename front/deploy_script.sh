@@ -24,8 +24,23 @@ elif [ $1 = "teacher" ]; then
         port="9060:8080"
 elif [ $1 = "psychological-evaluation" ]; then
         port="9050:8080"
+elif [ $1 = "eva" ]; then
+	port="10031:8080"
+elif [ $1 = "volunteer-admin" ]; then
+	port="10032:8080"
+elif [ $1 = "zhiya_gaokao" ]; then
+	port="10050:3000"
+elif [ $1 = "zhiya-teacher" ]; then
+	port="10051:8080"
+elif [ $1 = "zhiya-sass" ]; then
+	port="10052:8080"
 fi
 project_name=$1
+if [ $project_name = "eva" ]; then
+	project_name="h5-eva"
+fi
+echo $project_name
+
 image_repository=registry.cn-huhehaote.aliyuncs.com/fdfront/$project_name
 docker stop $project_name
 docker rm $project_name

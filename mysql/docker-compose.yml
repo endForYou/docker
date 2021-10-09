@@ -11,7 +11,7 @@ services:
       restart_policy:
         condition: on-failure
     environment:
-     MYSQL_ROOT_PASSWORD: rYa+wq10dFTWzYz8FeZgsWRygyKfLKULSRdKfRnEgSk=
+     MYSQL_ROOT_PASSWORD: Sj9PkBIIRPjG0qVbcjUjottgRgE=
     volumes:
       - data-mysql:/var/lib/mysql
       - config-mysql:/etc/mysql
