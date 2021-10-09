@@ -2,7 +2,7 @@ version: "3.7"
 services:
   redis:
     image: redis:4.0.11-alpine
-    command: redis-server --requirepass junyang@139
+    command: redis-server --requirepass rYa+wq10dFTWzYz8FeZgsWRygyKfLKULSRdKfRnEgSk=
     volumes:
       - data-redis:/data
       - .:/usr/local/etc/redis

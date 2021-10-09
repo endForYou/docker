@@ -13,10 +13,7 @@ services:
     environment:
      MYSQL_ROOT_PASSWORD: rYa+wq10dFTWzYz8FeZgsWRygyKfLKULSRdKfRnEgSk=
     volumes:
-      - data-mysql:/var/lib/mysql
-      - config-mysql:/etc/mysql
+      - /mnt1/mysql/mysql8:/var/lib/mysql
+      - /mnt1/mysql/mysql8_conf:/etc/mysql
     ports:
-      - "3306:3306"
-volumes:
-  data-mysql:
-  config-mysql:
+      - "3309:3306"
