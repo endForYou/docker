@@ -16,7 +16,7 @@ services:
       - data-mysql:/var/lib/mysql
       - config-mysql:/etc/mysql
     ports:
-      - "3306:3306"
+      - "3309:3306"
 volumes:
   data-mysql:
   config-mysql:
